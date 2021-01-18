@@ -1,0 +1,237 @@
+{
+    "0" : {
+        "nom" : "donnees utiles :",
+        "hauteur-bouton-valider" : 60,
+        "valeurs-defaut": ["","", null,-1,false,-15,null,""]
+    },
+    "1" : {
+        "nom" : "accueil",
+        "html" : "Bonjour et bienvenue !<br/><br/>Tu es sur le point de renouveler ton inscription au <span class='gras'>point relais compost de#PPR#relais#nom# !</span><br/><br/>C'est reparti pour le compost ? 😀",
+        "affichage" : 1,
+        "hauteur-actions": 0,
+        "mode-affichage": "bas",
+        "parametres-questions" : []
+    },
+    "2" : {
+        "nom" : "identite",
+        "html" : "Tout d'abord,<br/><br/><span class='gras'>Comment t'appelles-tu ?</span> 😀",
+        "affichage" : 1,
+        "hauteur-actions": 100,
+        "mode-affichage": "bas",
+        "nombre-reponses-attendues": 2,
+        "parametres-questions" : [
+            {
+                "nom": "prenom",
+                "type-reponse": 1,
+                "affichage": 1,
+                "placeholder": "Prénom",
+                "recap": {
+                    "nom" : "Prénom :"
+                }
+            },
+            {
+                "nom": "nom",
+                "type-reponse": 1,
+                "affichage": 1,
+                "placeholder": "Nom",
+                "recap": {
+                    "nom" : "Nom :"
+                }
+            }
+        ]
+    },
+    "3" : {
+        "nom" : "contact",
+        "html" : "Trop content de te revoir#PPR#heros#prenom# ! 👋<br/><br/><span class='gras'>Peux-tu me repréciser le meilleur moyen de te contacter pour te fournir les informations du point relais ?</span>",
+        "affichage" : 1,
+        "hauteur-actions": 0,
+        "mode-affichage": "flux",
+        "nombre-reponses-attendues": 1,
+        "parametres-questions" : 
+        [
+            {
+                "nom": "mail",
+                "type-reponse": 8,
+                "affichage": 1,
+                "html": "Adresse mail :",
+                "placeholder": "exemple@email.fr",
+                "recap": {
+                    "nom": "Adresse e-mail :"
+                }
+            },
+            {
+                "nom": "prefs-com",
+                "type-reponse": 5,
+                "html": "Je préfère recevoir un SMS quand c'est possible, des mails j'en reçois déjà plein... :)",
+                "affichage": 1
+            },
+            {
+                "nom": "telephone",
+                "type-reponse": 7,
+                "placeholder": "06 00 00 00 00",
+                "html": "Numéro de téléphone : (facultatif)",
+                "affichage": 1
+            }
+        ]
+    },
+    "4" : {
+        "nom" : "veut-seau",
+        "html" : "<span class='gras'>Est-ce que tu souhaites qu'on t'équipe d'un seau en plus ?</span><br/><br/>Hermétique et solide il sera ton allié pour stocker et transporter sereinement tes épluchures !",
+        "affichage" : 1,
+        "hauteur-actions": 1,
+        "pont-logique": {
+            "destination": 7,
+            "question-source": 0,
+            "reponse-source": 1
+        },
+        "nombre-reponses-attendues": 1,
+        "mode-affichage": "flux",
+        "parametres-questions" : [
+            {
+                "nom": "veut-seau",
+                "type-reponse": 4,
+                "affichage": 1,
+                "textes-reponses": ["Oui, s'il vous plaît !","Non merci, j'ai ce qu'il me faut."],
+                "images-reponses": ["", ""],
+                "recap" :{
+                    "condition-hold": [0],
+                    "affichage": 0
+                }
+            }
+        ]
+        
+    },
+    "5" : {
+        "nom" : "choix-seau",
+        "html" : "<span class='gras'>Lequel sera l'élu de ton coeur ?</span><br/><br/> Chaque année, des millions de seaux plastiques solides sont jetés par l'industrie agro-alimentaire après une seule utilisation. Alors plutôt que d'en produire, on a décidé de les sauver de la poubelle, et paf, les voilà tous beaux tous propres pour toi !",
+        "affichage" : 1,
+        "nombre-reponses-attendues": 1,
+        "hauteur-actions": 100,
+        "mode-affichage": "flux",
+        "parametres-questions" : [
+            {
+                "nom":"choix-seau",
+                "type-reponse": 4,
+                "affichage": 1,
+                "textes-reponses": ["Tout nu !", "Avec sa jolie chaussette"],
+                "images-reponses": ["seau-nu.jpg", "seau-chaussette-verte.jpg"],
+                "recap": {
+                    "nom" : "Bioseau :",
+                    "condition": 4,
+                    "noms-choix": ["Un seau tout nu","Seau avec chaussette verte"]
+                }
+            }
+        ]
+        
+    },
+    "6" : {
+        "nom" : "prix-seau",
+        "html" : "<span class='gras'>Selon toi, quel est son juste prix ? ⚖️</span><br/><br/>Pour information, nous estimons aujourd'hui qu'un seau nu nous coûte 5€, et un seau habillé 9€. Le seau provient du ré-emploi, car nous les sauvons de la poubelle de restaurateurs. Les chaussettes sont conçues avec soin par les coûturières nantaises en réinsertion de l'association les Femmmes en Fil. <br/><br/> Nous le proposons à prix libre pour financer sa collecte et confection, on compte sur toi !",
+        "affichage" : 1,
+        "mode-affichage": "bas",
+        "hauteur-actions": 100,
+        "nombre-reponses-attendues": 1,
+        "parametres-questions" : [
+            {
+                "nom": "prix-seau",
+                "type-reponse": 6,
+                "unite": "€",
+                "affichage": 1,
+                "proposition-reponse": 9,
+                "min": 2,
+                "step": 1,
+                "recap": {
+                    "prefixe" : "à",
+                    "condition": 4,
+                    "panier": "oui"
+                }
+            }
+        ]
+        
+    },
+    "7" : {
+        "nom" : "montant-cotisation",
+        "html" : "<span class='gras'>Pour cette nouvelle période, quel sera pour toi le juste prix mensuel pour financer le retour à la terre de tes biodéchets ? ⚖️</span><br/><br/><span class='petit'>Pour rappel, nous proposons une cotisation à prix libre, avec un minimum de 1€ / mois pour faire vivre la démarche. Le compost produit ayant très peu de valeur monétaire, ce travail coûte aujourd'hui de l'argent. En attendant l'implicaiton de la collectivité, la démarche est rendue possible uniquement par la participation citoyenne, selon les moyens et les apports en biodéchets de chacun. Cette cotisation permet de payer les infrastructures de collecte et de rémunérer les acteurs de la boucle, on compte sur toi</span> 👍",
+        "affichage" : 1,
+        "mode-affichage": "bas",
+        "hauteur-actions": 100,
+        "nombre-reponses-attendues": 1,
+        "parametres-questions" : [
+            {
+                "nom": "montant-cotisation",
+                "type-reponse": 6,
+                "unite": "€ / mois",
+                "affichage": 1,
+                "proposition-reponse": 3,
+                "min": 1,
+                "step": 0.5,
+                "recap": {
+                    "nom" : "Cotisation prélevée chaque mois :",
+                    "panier": "oui"
+                }
+            }
+        ]
+    },
+    "8" : {
+        "nom" : "recap-panier",
+        "html" : "<span class='gras'>Je récapitule tes informations, dis-moi si tout est bon :</span>",
+        "affichage" : 1,
+        "mode-affichage": "recap",
+        "parametres-questions" : []
+    },
+    "9" : {
+        "nom" : "paiement",
+        "affichage" : 1,
+        "mode-affichage": "paiement",
+        "pont-logique":{
+            "destination": 11,
+            "statut": "succes"
+        },
+        "parametres-questions": [
+            {
+                "nom": "cgu",
+                "type-reponse": 5,
+                "required": true,
+                "html": "Je reconnais avoir pris connaissance <a target='_blank' href='https://ouivalo.fr/mention-légale.php'>des conditions générales d'utilisation de Ouivalo</a> et les accepte.",
+                "affichage": 1
+            }
+        ]
+    },
+    "10" : {
+        "nom" : "paiement-autre",
+        "html": "<span class='gras'>Dis-nous tout, commment souhaites-tu règler ta participation pour ton inscription ? </span><br/><br/>On reviendra vers toi pour trouver une solution qui convient :)",
+        "affichage" : 1,
+        "mode-affichage": "bas",
+        "hauteur-actions": 110,
+        "parametres-questions": [
+            {
+                "nom": "message",
+                "type-reponse": 2,
+                "affichage": 1,
+                "placeholder": "Quel autre moyen de paiement ?"
+            }
+        ]
+    },
+    "11" : {
+        "nom" : "ecran-fin",
+        "html" : "Bravo, ton inscription est bien renouvellée au point relais de#PPR#relais#nom#, c'est parti pour le compost !<br/><br/>Longue vie à tes épluchures et à très vite ! <br/>La trib’ise de la tribu 😗<br/><br/> Si tu souhaites nous laisser un petit mot (commentaire, remarque particulière, suggestion d'amélioration), c'est par ici :",
+        "affichage" : 1,
+        "mode-affichage": "bas",
+        "hauteur-actions": 110,
+        "parametres-questions": [
+            {
+                "nom": "commentaire",
+                "type-reponse": 2,
+                "affichage": 1,
+                "placeholder": "Un commentaire ? :)"
+            }
+        ]
+    },
+    "12" : {
+        "nom" : "fin",
+        "html" : "Merci, c'est dans la boîte !<br/>On revient vite vers toi :)",
+        "affichage" : 1,
+        "mode-affichage": "fin",
+        "parametres-questions": []
+    }
+}
