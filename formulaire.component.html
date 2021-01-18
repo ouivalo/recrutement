@@ -1,0 +1,341 @@
+<form class="hero is-fullheight element-reduit-droite" #f="ngForm"  (ngSubmit)="onSubmit(f)" [id]="this.paymentId()">
+    
+    <!--======================================HEADER CONSTANT ============================-->
+    <div class="hero-head element-reduit-droite header-ouivalo">
+
+        <div class="div-bouton-precedent element-reduit-droite" *ngIf="(this.id>1)&&(this.modeAffichage!='fin')&&(this.nomPage!='ecran-fin')">
+            <button class="bouton-precedent"type="button" (click)="questionPrecedente()"><img src="assets/img/retour-arriere2.png" class="img-bouton-retour" style="width:15px"></button>
+        </div>
+
+        <app-header-ouivalo></app-header-ouivalo>
+
+    </div>
+
+    <!--======================================CORPS DU FORMULAIRE ============================-->
+    <div class="hero-body corps-principal" id="flux-questions" [ngStyle]="{ 'margin-bottom': this.hauteurActions+'px'}">
+        
+        <!-- Affichage des questions :  -->
+    
+        
+        <div class="bulle-conteneur" *ngIf="this.htmlTexte!==''">
+
+            <!--============================= QUESTIONS ===============-->
+            
+            <p class="question" [innerHTML]="this.htmlTexte"> </p>
+
+            <!--RECAP-->
+            <div *ngIf="this.modeAffichage=='recap'" style="width: 100%; margin-top: -10%;" class="question">
+                <!--Ligne-->
+                <span *ngFor="let ligne of this.recap; let i = index" class="columns" style="padding:0; margin:0;">
+                    <span *ngFor="let champ of ligne; let i = index" class="column" style="padding:0; margin:0;">
+                        <br *ngIf="champ['nom']!==undefined"/>
+                        <p *ngIf="champ['nom']!==undefined" class='gras'>{{ champ['nom'] }}</p>
+                        <p *ngIf="champ['reponse']!==undefined">
+                            <span *ngIf="champ['prefixe']!==undefined">{{ champ['prefixe']+" " }}</span>
+                            {{ champ['reponse'] }}
+                            <span *ngIf="champ['unite']!==undefined">{{ " "+champ['unite'] }}</span>
+                        </p>
+                    </span>
+                </span>
+                
+            </div>
+            
+        </div>
+        
+        <!-- ===================== MODE AFFICHAGE FLUX =================-->
+
+        <div *ngIf="(this.modeAffichage==='flux')" 
+            class="question" style="width: 100%;"> <!--Un div pour chacune des questions dans le flux-->
+            
+            
+            
+            <div *ngFor="let question of this.questions; let i = index">
+
+                <!--Type 4 : choix multiples / radio barre-->
+                <div *ngIf="question['type-reponse']===4" class="radio-barre" 
+                        style="width:80%; margin-left: auto; margin-right:auto;">
+                    <br/>
+                    <div *ngFor="let texteReponse of question['textes-reponses']; let k = index"
+                    style="width: 100%;">
+                        <input type="radio" id="radio-{{k}}" [name]="question['nom']" [value]="k"
+                            [ngModel]="this.reponse[i]" (ngModelChange)="onChange($event, i)" >
+                            <label for="radio-{{k}}" class="box" style="width: 100%;">
+                                <!--Texte-->
+                                <span *ngIf="this.texteReponse != ''">{{ texteReponse }}</span>
+                                <!--Image-->
+                                <img *ngIf="question['images-reponses'][k] != ''"
+                                        [src]="this.getUrlImage(question['images-reponses'][k])" 
+                                        style="width: 100%;">
+                            </label>
+                    </div>
+                </div>
+                
+                <!--Type 5 : checkbox-->
+                <div *ngIf="question['type-reponse']===5" >
+                    <input class="input-checkbox" type="checkbox" [id]="question['nom']" [name]="question['nom']"
+                    [ngModel]="this.reponse[i]"  (ngModelChange)="onChange($event, i)">
+                    <label class="petit" [for]="question['nom']" [innerHtml]="'  ' + question['html']"></label>
+                </div>
+
+                <!--Type 7 : téléphone -->
+                <div *ngIf="question['type-reponse']===7">
+                    <label *ngIf="question['html']!==undefined" [for]="question['nom']" [innerHtml]="question['html']"></label><br/>
+                    <input [ngClass]="{'input': true, 'is-danger': this.verifChamp[i] === 1,
+                    'is-primary': this.verifChamp[i] === 2}" 
+                    class="input-text" type="number" [id]="question['nom']" [name]="question['nom']" 
+                    [placeholder]="question['placeholder']"
+                    pattern="[0-9]" 
+                    [ngModel]="this.reponse[i]"  (ngModelChange)="onChange($event, i)">
+                </div>
+
+                <!-- Type 8 : e-mail-->
+                <div *ngIf="question['type-reponse']===8">
+                    <p class="petit">Nous gardons toute donnée personnelle en lieu sûr juste pour nous. Pas de spam, que de l'impact positif, c'est plus Ouivalo !</p>
+                    <br/>
+                    <label *ngIf="question['html']!==undefined" [for]="question['nom']" [innerHtml]="question['html']"></label><br/>
+                    <input required [ngClass]="{'input': true, 'is-danger': this.verifChamp[i] === 1,
+                    'is-primary': this.verifChamp[i] === 2}" 
+                    class="input-text" type="email" [id]="question['nom']" [name]="question['nom']" 
+                    [placeholder]="question['placeholder']" 
+                    [ngModel]="this.reponse[i]"  (ngModelChange)="onChange($event, i)">
+                </div>
+
+                <br/>
+            </div>
+
+        </div>
+
+        <div class="question" [ngStyle]="{display: paiementDisplay()}">
+            <h3 class="gras" >Enregistrer un moyen de paiement :</h3>
+            <br/>
+            <p class="petit">Nous privilégions pour l'instant les règlements par carte bancaire.<span [ngStyle]="{display: autrePaiementDisplay()}"> Si cela n'est pas possible pour vous, vous pouvez nous le signaler <a  (click)='this.changerModePaiement()'>en cliquant ici</a></span></p>
+            <br/>
+            <p class="petit" [ngStyle]="{display: paiementRecurrentDisplay()}">Nous te facturerons tous les mois ta cotisation sur ce moyen de paiement. Tu pourras à tout moment résilier ou modifier ton inscription, en envoyant directement un mail à coucou@ouivalo.fr 🙂</p>
+            <p class="petit" [ngStyle]="{display: paiementRecurrentSeauxDisplay()}">Nous te facturerons tous les mois le nombre de seaux que tu as commandé sur cette période, au prix libre que tu nous as indiqué sur ce moyen de paiement. Tu pourras à tout moment résilier ou modifier ton inscription, en envoyant directement un mail à coucou@ouivalo.fr 🙂</p>
+            <br/>
+            <br/>
+
+            <div id="card-element" [ngStyle]="{display: modePaiement()}">
+                <!-- Elements will create input elements here -->
+            </div>
+        
+            <!-- We'll put the error messages in this element -->
+            <br/>
+
+            <div id="card-errors" role="alert" class="petit" style="color: red"></div>
+            <div id="erreur-paiement" class="petit" style="color: red"></div>
+
+            <br/>
+
+            
+            <div *ngFor="let question of this.questions; let i = index">
+
+                <!-- Autre moyen de paiement ==========-->
+                <!--TEXTE LONG-->
+                <div *ngIf="question['type-reponse']===2" [ngStyle]="{display: !modePaiement()}">
+                    <textarea [placeholder]="question['placeholder']" 
+                                [id]="question['nom']" [name]="question['nom']"
+                                [ngModel]="this.reponse[i]"  (ngModelChange)="onChange($event, i)"
+                                style="height : 80px;"
+                            ></textarea>
+                </div>
+
+                <!-- CGUU ==========-->
+                <!--Type 5 : checkbox-->
+                <div *ngIf="question['type-reponse']===5" >
+                    <input class="input-checkbox" type="checkbox" [id]="question['nom']" [name]="question['nom']"
+                    [ngModel]="this.reponse[i]"  (ngModelChange)="onChange($event, i)">
+                    <label class="petit" [for]="question['nom']" [innerHtml]="'  ' + question['html']"></label>
+                </div>
+
+                
+            </div>
+
+
+        </div>
+
+        
+
+    </div>
+
+    
+    <!--========================================FOOTER D'ACTIONS ============================-->
+
+    <div class="hero-foot footer-actions">
+
+        <div class="conteneur-actions" *ngIf="this.modeAffichage==='bas'">
+
+            <!--============================= MODE AFFICHAGE BAS ===============-->
+            
+            <div class="div-action" *ngFor="let question of this.questions; let i = index">
+
+                <!-- TEXTE COURT-->
+                <div *ngIf="question['type-reponse']===1"  style="height : 60px;">
+                    <input [ngClass]="{'input': true, 'is-danger': this.verifChamp[i] === 1,
+                    'is-primary': this.verifChamp[i] === 2}" 
+                    class="input-text" type="text" [id]="question['nom']" [name]="question['nom']" 
+                    [placeholder]="question['placeholder']" 
+                    [ngModel]="this.reponse[i]"  (ngModelChange)="onChange($event, i)">
+                </div>
+
+                <!--TEXTE LONG-->
+                <div *ngIf="question['type-reponse']===2">
+                    <textarea [placeholder]="question['placeholder']" 
+                                [id]="question['nom']" [name]="question['nom']"
+                                [ngModel]="this.reponse[i]"  (ngModelChange)="onChange($event, i)"
+                                style="height : 80px;"
+                            ></textarea>
+                </div>
+
+                <!-- NOMBRE -->
+                <div class="bloc-prix div-action" *ngIf="question['type-reponse']===6">
+                    <br/>
+                    <button class="bouton-plus-moins" type="button"
+                        (click)="decrementer(0, question['min'], question['step'])"
+                        ><img src="assets/img/moins-prix.png" width="50px"></button>
+                        <span style="position:relative;">
+                            <input type="number" [id]="question['nom']" [name]="question['nom']" 
+                                [min]="question['min']" [step]="question['step']"
+                                [ngModel]="this.reponse[0]"  (ngModelChange)="onChange($event, 0)"
+                                class="input-number" >
+                            <p class="unite" style="position:absolute; right:0;top:0;">{{question['unite']}}</p>
+                        </span>
+                    <button class="bouton-plus-moins" type="button"
+                        (click)="incrementer(0, question['min'], question['step'])"
+                        ><img src="assets/img/plus-prix.png" width="50px"></button>
+                </div>
+
+                <!-- Type 8 : e-mail-->
+                <div *ngIf="question['type-reponse']===8">
+                    <p class="petit" id="erreurRechercheMail" style="display: none;">Désolé, nous n'avons pas trouvé cet e-mail dans nos petits carnets... Peux-tu en essayer un autre ?</p>
+                    <input required [ngClass]="{'input': true, 'is-danger': this.verifChamp[i] === 1,
+                    'is-primary': this.verifChamp[i] === 2}" 
+                    class="input-text" type="email" [id]="question['nom']" [name]="question['nom']" 
+                    [placeholder]="question['placeholder']" 
+                    [ngModel]="this.reponse[i]"  (ngModelChange)="onChange($event, i)">
+                </div>
+
+                
+            </div>
+
+        </div>
+
+        <!--====== Bouton -->
+        <button class="bouton-valider" *ngIf="(this.id<this.nombrePages())&&(this.modeAffichage!=='fin')"  
+                [ngClass]="{'button':true, 'is-loading' : this.spinner}"
+                [ngStyle]="{height : this.hauteurBoutonAction+'px'}"
+                [disabled]="this.isDisabled()"
+                >Je valide !</button>
+
+            <!-- FIN ACTIONS =======-->
+    </div>
+
+    
+
+</form>
+
+
+
+
+
+<!-- 2 ====== HISTOIRE BIODECHETS
+            <p class="question" *ngIf="false">
+                Enchanté ! 👋<br/><br/><br/><span class="gras">On est curieux, alors peux-tu nous raconter ton histoire personnelle avec les biodéchets ?</span><br/><br/>
+            </p>
+
+            <p class="question" *ngIf="false">
+                ça promet ! Nous aussi, nous avons été frustrés de ne pas trouver
+                de solutions de compostage en ville, et c'est pourquoi nous avons développé Ouivalo,
+                pour ensemble, développer des solutions pour le plus grand nombre !
+                <br/>
+                <br/> <span class="gras">Comment est-ce que toi tu nous as connu ? :)</span>
+            </p>
+
+            <p class="question" *ngIf="this.id == 4">
+                <span class="gras">
+                C'est parti pour le compost !<br/>
+                <br/>
+                Première étape : le seau !<br/>
+                <br/> 
+                Est-ce qu'on t'équipe d'un seau ?</span><br/>
+                <br/>
+                Hermétique et solide il sera ton allié pour stocker et transporter sereinement 
+                tes épluchures de ta cuisine jusqu'à ton point relais.
+            </p>
+            
+
+            <p class="question" *ngIf="this.id == 5">
+                Chez Ouivalo, on croît en la valeur de la ressource. Pour cela, on fait tout pour placer le 
+                ré-emploi avant toute chose. On a découvert que chaque année, des millions de seaux plastiques
+                solides étaient jetés par l'industrie agro-alimentaire après une seule utilisation. 
+                <br/>Alors plutôt que d'en produire, on a décidé de les sauver de la poubelle, et paf,
+                 les voilà tous beaux tous propres pour toi!
+                <br/>
+                <br/> <span class="gras">Une seule question : lequel éliras-tu ?</span>
+            </p>
+
+            <p  class="question" *ngIf="this.id == 6">
+                Pour qu'ils restent accessible au plus grand nombre, nous proposons ces seaux
+                à prix libre ! <br/>Les contributions servent à financer le travail de collecte, de lavage,
+                d'habillage et de distribution du seau. Les participations sont en moyenne de 8€ pour un seau
+                tout nu, à 12€ pour un seau habillé de tissu. <br/>
+                <br/><span class="gras">Et pour toi, quel est le juste prix ? :)</span>
+            </p>
+
+            <p class="question" *ngIf="this.id == 7">Te voilà bien équipé ! <br/>
+                <br/>
+                <span class="gras">Deuxième étape :</span> le tri des biodéchets au quotidien. 
+                <br/>Pour que tout se passe bien, on va te former sur la démarche à suivre avec un petit
+                manuel et on sera là pour répondre à toute question. <br/>
+                <br/><span class="gras">A titre indicatif, peux-tu nous dire ton niveau en biodéchets ? </span>
+            </p>
+
+            <p class="question" *ngIf="this.id == 8">Troooop bien ! <br/>
+                <br/><span class="gras">Troisième étape :</span> amener ton seau d'épluchures au point relais de ton 
+                coeur. On recommande pour des questions d'hygiène de l'amener une fois par semaine.
+                <br/>
+                <br/><span class="gras">C'est un lieu que tu fréquentes régulièrement déjà ? </span>
+            </p>
+
+            <p class="question" *ngIf="this.id == 9">Ca roule ! 
+                <br/>
+                <br/><span class="gras">Dernière étape :</span> composter tes biodéchets à la borne !
+                <br/> Nous te proposons pour commencer de tester le service sur une période de XX.
+                <br/> Ou bien on te laisse le choix, on n'a pas encore décidé.  
+            </p>
+
+ 
+            <p class="question" *ngIf="this.id == 10">
+                
+                C'est parti, nous collectons tes biodéchets et les compostons pour produire un terreau 
+                de qualité qui amende les sols d'agriculteurs durables et locaux.<br/>
+                Le compost produit ayant très peu de valeur monétaire, ce travail coûte aujourd'hui de l'argent.
+                En attendant l'implicaiton de la collectivité, la démarche est rendue possible uniquement
+                par la participation citoyenne. C'est pourquoi nous proposons une cotisation à prix libre pour que
+                tout le monde, selon ses moyens puisse participer et composter ses épluchures. 
+                <br/>Indication: la cotisation commence à 1€ / mois, et en moyenne sur ce point les citoyens 
+                cotisent 4 € / mois. Toute implication supplémentaire permet d'ouvrir la démarche à des personnes 
+                ayant moins de moyens ! 
+                <br/>
+                <br/> <span class="gras">Et pour toi, quelle sera ta cotisation pour ces X mois ? :) </span>
+            </p>
+
+            
+
+            <p class="question" *ngIf="this.id == 11">C'est tooop, t'es paré pour composter !! 
+                <br/> Je récapitule tes informations, dis-moi si tout est bon :
+            </p>
+
+            <p class="question" *ngIf="this.id == 12">Cela fait donc un total de X € à payer maintenant.
+                <br/>Nous te proposons un paiement par carte bancaire (est-ce qu'il y a le choix ?)
+            </p>
+
+            <p class="question"  *ngIf="this.id == 13">Bravo à tous !</p>
+            -->
+            <!--FIN QUESTIONS =======-->
+        
+        <!--Pour équilibrer le flex avec le bouton suivant en haut
+        <div *ngIf="this.id>1">
+            <br/>
+        </div>
+        -->

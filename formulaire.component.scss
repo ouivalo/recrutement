@@ -1,0 +1,191 @@
+@import "../../sass/variables.scss";
+
+
+.action-principale{
+    padding: 3%;
+}
+.action-principale > * {
+    display: inline-block;
+    vertical-align: middle;
+}
+.input-text{
+    padding:8% 5%;
+    font-size: 1.3rem;
+    font-family: "rubikregular";
+    width:100%;
+    border: none;
+    text-align: left;
+}
+.input-text :focus, .input-text :hover, .input-text :active, .input-text :valid{
+    border: none;
+    background-color: transparent;
+}
+::-webkit-input-placeholder { /* Edge */
+    color:grey;
+}
+
+:-ms-input-placeholder { /* Internet Explorer 10-11 */
+    color: grey;
+}
+  
+::placeholder {
+color: grey;
+}
+
+/* =====================QUESTIONS / REPONSES =============*/
+
+.bulle-conteneur{
+    border-radius: 5px;
+    width: 90%;
+    color: grey;
+    box-shadow: 0px 0px 10px 5px rgba(0,0,0,0.15);
+    position: relative;
+}
+.bulle-conteneur:after{
+	content: ' ';
+    position: absolute;
+	width: 0;
+    height: 0;
+    bottom: 0;
+    left:-12px;
+    border-bottom: 30px solid white;
+    border-left: 15px solid transparent;
+    /*box-shadow: 0px 0px 10px 5px rgba(0,0,0,0.15);*/
+}
+.question{
+    padding:10%;
+}
+.reponse {
+    box-shadow: 0px 0px 10px 5px rgba(0,0,0,0.15);
+    padding: 5%;
+    margin-left:30%;
+    text-align: right;
+    background-color: white;
+    border-radius: 5px;
+    width:80%;
+    color: $ouivalo2;
+    position:relative;
+}
+.reponse:after{
+	content: ' ';
+    position: absolute;
+	width: 0;
+    height: 0;
+    bottom: 0;
+    left:-12px;
+    border-bottom: 30px solid white;
+    border-left: 15px solid transparent;
+    /*box-shadow: 0px 0px 10px 5px rgba(0,0,0,0.15);*/
+}
+.img-bouton-retour{
+    width:50px;
+}
+#flux-questions{
+    justify-content: center;
+    flex-direction: column;
+    padding:5%;
+}
+
+.bloc-prix{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+.bloc-prix button{
+    background-color: white;
+    border:none;
+}
+.bouton-plus-moins{
+    cursor: pointer;
+}
+.bloc-prix button:hover{
+    box-shadow: 0px 0px 10px 5px rgba(0,0,0,0.15);
+}
+.bloc-prix input{
+    border: 1px solid rgba(0,0,0,0.15);
+    border-radius: 4px;
+    font-size: 1.5em;
+    padding: 2% 10%;
+    width:100%;
+    display:flex;
+    justify-content: flex-start;
+    text-align: left;
+    align-items: center;
+}
+.bloc-prix span{
+    width:50%;
+}
+.bloc-prix .unite{
+    padding: 2% 10%;
+    width:90%;
+    height:100%;
+    font-size: 0.8em;
+    display:flex;
+    justify-content: flex-end;
+    text-align: right;
+    align-items: center;
+}
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
+}
+
+.radio-barre input[type="radio"]{
+    visibility: hidden;
+    position:absolute;
+}
+.radio-barre label{
+    display:block;
+    text-align: center;
+    background-color: white;
+    padding: 2% 5%;
+    border: 1px solid rgba(0,0,0,0.15);
+    color: $ouivalo1;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-bottom:10px;
+}
+.radio-barre input[type="radio"]:checked + label{
+    
+    display: block;
+    border: 3px solid $ouivalo1;
+    box-shadow: 0px 0px 10px 5px rgba(0,0,0,0.15);
+    border-radius: 5px;
+}
+
+.bouton-barre{
+    display: inline-block;
+    background-color: $ouivalo2;
+    width:90%;
+    margin-right: -90px;
+    padding: 2% 5%;
+    color: white;
+    border:none;
+    height:70px;
+    border-radius: 35px;
+    cursor: pointer;
+}
+
+
+textarea{
+    height:80px;
+    padding: 5%;
+    resize: none;
+    overflow: auto;
+    width:100%;
+    border: 1px solid rgba(0,0,0,0.15);
+    font-family: 'rubikregular';
+    font-size: 1rem;
+
+}
+
+input[type=checkbox]:checked{
+    background-color: $ouivalo2;
+}
